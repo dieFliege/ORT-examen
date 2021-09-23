@@ -8,7 +8,7 @@ const tamKb = 1024;
 let matchCount = false;
 let matchSize = false;
 let matchLength = false;
-let matchsearch = false;
+let matchSearch = false;
 let i = 2;
 
 while(!matchCount && i < args.length){
@@ -25,6 +25,12 @@ while(!matchSize && i < args.length){
 i = 2;
 while(!matchLength && i < args.length){
     if(args[i] == 'length') matchLength = true;
+    i++;
+}
+
+i = 2;
+while(!matchSearch && i < args.length){
+    if(args[i] == 'search') matchSearch = true;
     i++;
 }
 
@@ -61,6 +67,19 @@ if(matchLength){
     fs.appendFile('summary.txt', `${tamTo} chars\r\n`, function(err){if(err) throw err;})
 }
 
-if(!matchCount && !matchSize && !matchLength && !matchsearch){
+if(matchSearch){
+    fs.readdir(carpeta, (err, archivos) => {
+        archivos.forEach(a => {
+            fs.readFile(carpeta.concat(a), function (err, data) {
+                if (err) throw err;
+                if(a.indexOf(args[3]) >= 0){
+                 console.log(a);
+                }
+              });
+        });
+      });
+}
+
+if(!matchCount && !matchSize && !matchLength && !matchSearch){
     console.log(`El comando ${args[2]} no se reconoce. Los comandos validos son: count, size, length, search`);
 }
